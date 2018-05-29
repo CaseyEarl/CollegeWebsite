@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AdvWebDevProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Classes">
+          <Key>
+            <PropertyRef Name="ClassId" />
+          </Key>
+          <Property Name="ClassId" Type="int" Nullable="false" />
+          <Property Name="ClassName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ClassDate" Type="datetime" Nullable="false" />
+          <Property Name="ClassDescription" Type="nvarchar" MaxLength="2000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClassStudents">
+          <Key>
+            <PropertyRef Name="ClassId" />
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="ClassId" Type="int" Nullable="false" />
+          <Property Name="StudentId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoginRequests">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NewOrReactivate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReasonForAccess" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateNeededBy" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Students">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="int" Nullable="false" />
+          <Property Name="StudentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="StudentEmail" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="StudentLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="StudentPassword" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AdvWebDevProject.dbo.vClasses' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vClasses">
+          <Key>
+            <PropertyRef Name="ClassId" />
+            <PropertyRef Name="ClassName" />
+            <PropertyRef Name="ClassDate" />
+            <PropertyRef Name="ClassDescription" />
+          </Key>
+          <Property Name="ClassId" Type="int" Nullable="false" />
+          <Property Name="ClassName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ClassDate" Type="datetime" Nullable="false" />
+          <Property Name="ClassDescription" Type="nvarchar" MaxLength="2000" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ClassStudents_Classes">
+          <End Role="Classes" Type="Self.Classes" Multiplicity="1" />
+          <End Role="ClassStudents" Type="Self.ClassStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Classes">
+              <PropertyRef Name="ClassId" />
+            </Principal>
+            <Dependent Role="ClassStudents">
+              <PropertyRef Name="ClassId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClassStudents_Students">
+          <End Role="Students" Type="Self.Students" Multiplicity="1" />
+          <End Role="ClassStudents" Type="Self.ClassStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="ClassStudents">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="pDelClassStudents" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClassId" Type="int" Mode="In" />
+          <Parameter Name="StudentId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="pInsClassStudents" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClassId" Type="int" Mode="In" />
+          <Parameter Name="StudentId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="pInsLoginRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="EmailAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="LoginName" Type="nvarchar" Mode="In" />
+          <Parameter Name="NewOrReactivate" Type="nvarchar" Mode="In" />
+          <Parameter Name="ReasonForAccess" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateNeededBy" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="pSelClassesByStudentID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StudentId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="pSelClassesByStudents" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pSelLoginIdByLoginAndPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StudentLogin" Type="nvarchar" Mode="In" />
+          <Parameter Name="StudentPassword" Type="nvarchar" Mode="In" />
+          <Parameter Name="StudentId" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="pUpdClassStudents" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OriginalClassId" Type="int" Mode="In" />
+          <Parameter Name="OriginalStudentId" Type="int" Mode="In" />
+          <Parameter Name="NewClassId" Type="int" Mode="In" />
+          <Parameter Name="NewStudentId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="AdvWebDevProjectModelStoreContainer">
+          <EntitySet Name="Classes" EntityType="Self.Classes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClassStudents" EntityType="Self.ClassStudents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginRequests" EntityType="Self.LoginRequests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vClasses" EntityType="Self.vClasses" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vClasses].[ClassId] AS [ClassId], 
+    [vClasses].[ClassName] AS [ClassName], 
+    [vClasses].[ClassDate] AS [ClassDate], 
+    [vClasses].[ClassDescription] AS [ClassDescription]
+    FROM [dbo].[vClasses] AS [vClasses]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_ClassStudents_Classes" Association="Self.FK_ClassStudents_Classes">
+            <End Role="Classes" EntitySet="Classes" />
+            <End Role="ClassStudents" EntitySet="ClassStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClassStudents_Students" Association="Self.FK_ClassStudents_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="ClassStudents" EntitySet="ClassStudents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AdvWebDevProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Class">
+          <Key>
+            <PropertyRef Name="ClassId" />
+          </Key>
+          <Property Name="ClassId" Type="Int32" Nullable="false" />
+          <Property Name="ClassName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClassDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ClassDescription" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Students" Relationship="Self.ClassStudents" FromRole="Classes" ToRole="Students" />
+        </EntityType>
+        <EntityType Name="LoginRequest">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoginName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NewOrReactivate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReasonForAccess" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateNeededBy" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="Int32" Nullable="false" />
+          <Property Name="StudentName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StudentEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StudentLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StudentPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Classes" Relationship="Self.ClassStudents" FromRole="Students" ToRole="Classes" />
+        </EntityType>
+        <EntityType Name="vClass">
+          <Key>
+            <PropertyRef Name="ClassId" />
+            <PropertyRef Name="ClassName" />
+            <PropertyRef Name="ClassDate" />
+            <PropertyRef Name="ClassDescription" />
+          </Key>
+          <Property Name="ClassId" Type="Int32" Nullable="false" />
+          <Property Name="ClassName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClassDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ClassDescription" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="ClassStudents">
+          <End Role="Classes" Type="Self.Class" Multiplicity="*" />
+          <End Role="Students" Type="Self.Student" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="AdvWebDevProjectEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Classes" EntityType="Self.Class" />
+          <EntitySet Name="LoginRequests" EntityType="Self.LoginRequest" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="vClasses" EntityType="Self.vClass" />
+          <AssociationSet Name="ClassStudents" Association="Self.ClassStudents">
+            <End Role="Classes" EntitySet="Classes" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+          <FunctionImport Name="pDelClassStudents">
+            <Parameter Name="ClassId" Mode="In" Type="Int32" />
+            <Parameter Name="StudentId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pInsClassStudents">
+            <Parameter Name="ClassId" Mode="In" Type="Int32" />
+            <Parameter Name="StudentId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pInsLoginRequest">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="EmailAddress" Mode="In" Type="String" />
+            <Parameter Name="LoginName" Mode="In" Type="String" />
+            <Parameter Name="NewOrReactivate" Mode="In" Type="String" />
+            <Parameter Name="ReasonForAccess" Mode="In" Type="String" />
+            <Parameter Name="DateNeededBy" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pSelClassesByStudentID" ReturnType="Collection(AdvWebDevProjectModel.pSelClassesByStudentID_Result)">
+            <Parameter Name="StudentId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pSelClassesByStudents" ReturnType="Collection(AdvWebDevProjectModel.pSelClassesByStudents_Result)" />
+          <FunctionImport Name="pSelLoginIdByLoginAndPassword">
+            <Parameter Name="StudentLogin" Mode="In" Type="String" />
+            <Parameter Name="StudentPassword" Mode="In" Type="String" />
+            <Parameter Name="StudentId" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pUpdClassStudents">
+            <Parameter Name="OriginalClassId" Mode="In" Type="Int32" />
+            <Parameter Name="OriginalStudentId" Mode="In" Type="Int32" />
+            <Parameter Name="NewClassId" Mode="In" Type="Int32" />
+            <Parameter Name="NewStudentId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="pSelClassesByStudentID_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="String" Name="StudentName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="StudentEmail" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="ClassId" Nullable="false" />
+          <Property Type="String" Name="ClassName" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="ClassDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="ClassDescription" Nullable="false" MaxLength="2000" />
+        </ComplexType>
+        <ComplexType Name="pSelClassesByStudents_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="String" Name="StudentName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="StudentEmail" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="ClassId" Nullable="false" />
+          <Property Type="String" Name="ClassName" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="ClassDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="ClassDescription" Nullable="false" MaxLength="2000" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AdvWebDevProjectModelStoreContainer" CdmEntityContainer="AdvWebDevProjectEntities">
+          <EntitySetMapping Name="Classes">
+            <EntityTypeMapping TypeName="AdvWebDevProjectModel.Class">
+              <MappingFragment StoreEntitySet="Classes">
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="ClassDate" ColumnName="ClassDate" />
+                <ScalarProperty Name="ClassDescription" ColumnName="ClassDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginRequests">
+            <EntityTypeMapping TypeName="AdvWebDevProjectModel.LoginRequest">
+              <MappingFragment StoreEntitySet="LoginRequests">
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="NewOrReactivate" ColumnName="NewOrReactivate" />
+                <ScalarProperty Name="ReasonForAccess" ColumnName="ReasonForAccess" />
+                <ScalarProperty Name="DateNeededBy" ColumnName="DateNeededBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="AdvWebDevProjectModel.Student">
+              <MappingFragment StoreEntitySet="Students">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="StudentName" ColumnName="StudentName" />
+                <ScalarProperty Name="StudentEmail" ColumnName="StudentEmail" />
+                <ScalarProperty Name="StudentLogin" ColumnName="StudentLogin" />
+                <ScalarProperty Name="StudentPassword" ColumnName="StudentPassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vClasses">
+            <EntityTypeMapping TypeName="AdvWebDevProjectModel.vClass">
+              <MappingFragment StoreEntitySet="vClasses">
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="ClassDate" ColumnName="ClassDate" />
+                <ScalarProperty Name="ClassDescription" ColumnName="ClassDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ClassStudents" TypeName="AdvWebDevProjectModel.ClassStudents" StoreEntitySet="ClassStudents">
+            <EndProperty Name="Classes">
+              <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+            </EndProperty>
+            <EndProperty Name="Students">
+              <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="pDelClassStudents" FunctionName="AdvWebDevProjectModel.Store.pDelClassStudents" />
+          <FunctionImportMapping FunctionImportName="pInsClassStudents" FunctionName="AdvWebDevProjectModel.Store.pInsClassStudents" />
+          <FunctionImportMapping FunctionImportName="pInsLoginRequest" FunctionName="AdvWebDevProjectModel.Store.pInsLoginRequest" />
+          <FunctionImportMapping FunctionImportName="pSelClassesByStudentID" FunctionName="AdvWebDevProjectModel.Store.pSelClassesByStudentID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AdvWebDevProjectModel.pSelClassesByStudentID_Result">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="StudentName" ColumnName="StudentName" />
+                <ScalarProperty Name="StudentEmail" ColumnName="StudentEmail" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="ClassDate" ColumnName="ClassDate" />
+                <ScalarProperty Name="ClassDescription" ColumnName="ClassDescription" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pSelClassesByStudents" FunctionName="AdvWebDevProjectModel.Store.pSelClassesByStudents">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AdvWebDevProjectModel.pSelClassesByStudents_Result">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="StudentName" ColumnName="StudentName" />
+                <ScalarProperty Name="StudentEmail" ColumnName="StudentEmail" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="ClassDate" ColumnName="ClassDate" />
+                <ScalarProperty Name="ClassDescription" ColumnName="ClassDescription" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pSelLoginIdByLoginAndPassword" FunctionName="AdvWebDevProjectModel.Store.pSelLoginIdByLoginAndPassword" />
+          <FunctionImportMapping FunctionImportName="pUpdClassStudents" FunctionName="AdvWebDevProjectModel.Store.pUpdClassStudents" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

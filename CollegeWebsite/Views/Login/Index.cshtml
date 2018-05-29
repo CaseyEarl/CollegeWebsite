@@ -5,10 +5,14 @@
 <h1>Login:</h1>
 
 <div class="form-group">
-    <label for="usr">Name:</label>
-    <input type="text" class="form-control" id="usr">
+    <form method="post" action="/Login/Login">
+        <label for="usr">Name:</label>
+        <input type="text" class="form-control" name="usr" id="usr">
 
-    <label for="pwd">Password:</label>
-    <input type="password" class="form-control" id="pwd">
-    <p><a class="btn btn-default" href="#">Submit</a></p>
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" name="pwd" id="pwd">
+        
+        <br>
+        <input type="submit" class="btn btn-default" value="Submit">
+    </form>
 </div>

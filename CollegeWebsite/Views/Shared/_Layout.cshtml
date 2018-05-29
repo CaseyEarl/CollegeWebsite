@@ -6,6 +6,7 @@
     <title>@ViewBag.Title University Page</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("JavaScript", required: false)
 </head>
 <body >
     <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top" style="margin-top: 0px; padding-top:0px;">
@@ -32,9 +33,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Login/Register">Register</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Login">Login</a>
-                </li>
+                @{ if (Session["StudentName"] == null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Login">Login</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Login">Welcome @Session["StudentName"]</a>
+                        </li>
+                    }
+
+                }
+
 
             </ul>
         </div>
