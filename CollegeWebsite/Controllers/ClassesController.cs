@@ -25,7 +25,23 @@ namespace CollegeWebsite.Controllers
 
         public ActionResult MyClasses()
         {
-            return View();
+            if(Session["StudentID"] != null)
+            {
+                int sID = Convert.ToInt32(Session["StudentID"]);
+                List<pSelClassesByStudentID_Result> assignedClasses = db.pSelClassesByStudentID(sID).ToList<pSelClassesByStudentID_Result>();
+
+                return View(assignedClasses);
+            }
+            return Redirect("/Login/Index");
+        }
+
+        [HttpPost]
+        public ActionResult Drop(FormCollection form)
+        {
+            int sID = Convert.ToInt32(Session["StudentID"]);
+            int cID = Convert.ToInt32(form["ClassID"]);
+            db.pDelClassStudents(cID, sID);
+            return Redirect("/MyClasses");
         }
 
 
