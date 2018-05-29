@@ -17,7 +17,45 @@ namespace CollegeWebsite.Controllers
         // GET: Classes
         public ActionResult Index()
         {
+            
+            List<Class> filteredClasses = db.Classes.ToList();
             return View(db.Classes.ToList());
+
+        }
+
+        public ActionResult MyClasses()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult Register(FormCollection form)
+        {
+            if(Session["StudentID"] != null)
+            {
+                int studentID = Convert.ToInt32(Session["StudentID"]);
+                List<CollegeWebsite.Models.pSelClassesByStudentID_Result> assignedClasses = db.pSelClassesByStudentID(studentID).ToList<pSelClassesByStudentID_Result>();
+                int classId = Convert.ToInt32(form["ClassId"]);
+
+                for(int i = 0; i < assignedClasses.Count; i++)
+                {
+                    if (classId == assignedClasses[0].ClassId)
+                    {
+                        return Redirect("Index");
+                    }
+                }
+
+                db.pInsClassStudents(classId, studentID);
+                return Redirect("Index");
+            }
+            else
+            {
+                return Redirect("Index");
+            }
+            
+
+            
         }
 
         // GET: Classes/Details/5

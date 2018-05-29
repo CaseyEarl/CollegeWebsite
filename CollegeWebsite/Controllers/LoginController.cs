@@ -36,7 +36,7 @@ namespace CollegeWebsite.Controllers
             string studentLogin = form["usr"];
             string studentPassword = form["pwd"];
             db.pSelLoginIdByLoginAndPassword(form["usr"], form["pwd"], StudentId);
-            Student s = db.Students.Find(StudentId);
+            Student s = db.Students.Find(StudentId.Value);
             
             if (s.StudentPassword == form["pwd"])
             {
@@ -54,6 +54,16 @@ namespace CollegeWebsite.Controllers
         public ActionResult Register()
         {
             return View();
+        }
+
+        public ActionResult Logout()
+        {
+            Session["StudentName"] = null;
+            Session["StudentLogin"] = null;
+            Session["StudentEmail"] = null;
+            Session["StudentId"] = null;
+
+            return Redirect("Index");
         }
 
         [HttpPost]

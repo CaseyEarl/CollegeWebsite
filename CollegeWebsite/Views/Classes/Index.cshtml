@@ -7,31 +7,30 @@
 
 <div class="container">
     <div class="card-deck mb-3 text-center">
+        @{ 
+            foreach (var item in ViewData.Model) {
+                <div class="card mb-4 box-shadow">
+                    <div class="card-body">
+                        <h4 class="card-title">@item.ClassName</h4>
+                        <p class="card-text">@item.ClassDescription</p>
+                        <p class="card-text">@item.ClassDate</p>
+                        @if(Session["StudentName"] != null)
+                        {
 
-        <div class="card mb-4 box-shadow">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-
-
-        <div class="card mb-4 box-shadow">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-
-
-        <div class="card mb-4 box-shadow">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
+                        <form method="post" action="/Classes/Register">
+                            <input type="hidden" name="ClassName" value="@item.ClassName" />
+                            <input type="hidden" name="ClassDescription" value="@item.ClassDescription" />
+                            <input type="hidden" name="ClassDate" value="@item.ClassDate" />
+                            <input type="hidden" name="ClassId" value="@item.ClassId" />
+                            <input type="submit" class="btn btn-default" value="Register">
+                        </form>
+                            
+                        }
+                        
+                    </div>
+                </div>
+            };
+        }
+        
     </div>
 </div>
