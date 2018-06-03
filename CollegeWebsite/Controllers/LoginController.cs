@@ -31,6 +31,11 @@ namespace CollegeWebsite.Controllers
         [HttpPost]
         public ActionResult Login(FormCollection form)
         {
+            //Validation
+            if (form["usr"] != null && form["pwd"] != null )
+            {
+                return Redirect("/Login");
+            }
             System.Data.Entity.Core.Objects.ObjectParameter StudentId = new System.Data.Entity.Core.Objects.ObjectParameter("studentID", typeof(int));
             //int StudentId = -1;
             string studentLogin = form["usr"];
@@ -70,6 +75,12 @@ namespace CollegeWebsite.Controllers
         public ActionResult Register(FormCollection form)
         {
             DateTime userDate = DateTime.Parse(form["userDate"]);
+
+            //Validation
+            if(form["userName"] != null && form["userLogin"] != null && form["userEmail"] != null && form["userActivate"] != null && form["userReason"] != null)
+            {
+                return Redirect("/Register");
+            }
 
             int execute = db.pInsLoginRequest(form["userName"], form["userEmail"], form["userLogin"], form["userActivate"], form["userReason"], userDate);
             return Redirect("/Home");
